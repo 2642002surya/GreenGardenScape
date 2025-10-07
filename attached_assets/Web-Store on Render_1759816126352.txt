@@ -1,0 +1,256 @@
+💡 FINAL PROMPT (Full + Advanced Version)
+Create a fully functional, professional, and advanced affiliate marketing website for gardening and plant-related products.  
+The project must include everything below in detail, with all design, structure, and logic as described.
+
+Build it using **Next.js (latest App Router)**, **React**, **TailwindCSS**, **Framer Motion**, and **Supabase** for backend (auth, storage, and data).  
+It should look **modern, clean, and nature-themed** with a **green & white aesthetic**, **rounded cards**, **soft shadows**, and **smooth transitions**.
+
+---
+
+### 🔧 TECHNICAL REQUIREMENTS:
+- Framework: Next.js 14 (App Router)
+- Styling: TailwindCSS + ShadCN UI components
+- Animations: Framer Motion
+- Fonts: "Poppins" for headings, "Inter" for body (Google Fonts)
+- Icons: Lucide React
+- Backend: Supabase (auth + database + storage)
+- Hosting-ready: must run perfectly on Replit, Render, or Vercel (no paid domain required)
+- Optimization:
+  - Use Next.js Image component for all images
+  - Lazy-load images and animations
+  - Use static generation (SSG) with ISR
+- SEO: include meta tags, Open Graph tags, favicon, and sitemap generation
+- Security: sanitize inputs, use HTTPS links, prevent XSS, and protect admin routes
+- Environment variables:
+  - NEXT_PUBLIC_SUPABASE_URL
+  - NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+---
+
+### 🌱 WEBSITE STRUCTURE:
+**Total Pages (10 pages):**
+
+1. `/` – **Home Page**  
+   - Hero section with background nature image or gradient  
+   - Featured categories (Tools, Seeds, Fertilizers, Pots & Planters, Indoor Plants)  
+   - Featured products (from Supabase products table)
+   - “Best Deals” carousel  
+   - Newsletter signup box  
+   - Smooth scroll animations  
+
+2. `/shop` – **All Products Page**  
+   - Grid display of all products (fetched from Supabase)  
+   - Filters: category, price, discount, rating  
+   - Search bar (client-side)
+   - Product cards with: image, name, price, discount, “View Details”  
+
+3. `/product/[slug]` – **Product Detail Page**  
+   - Large image gallery  
+   - Title, category, price, discount, description  
+   - Rating stars  
+   - “Buy on Amazon” button (affiliate link)  
+   - “Add to Basket” + “Add to Wishlist” buttons  
+   - Related products carousel  
+
+4. `/blog` – **Blog Listing Page**  
+   - Cards for each article (image + title + snippet)  
+   - Pagination (static)  
+   - Links to `/blog/[slug]`
+
+5. `/blog/[slug]` – **Blog Detail Page**  
+   - Article layout with headings, images, lists, quotes  
+   - “Recommended Products” section at bottom  
+
+6. `/about` – **About Page**  
+   - Mission of site: helping gardeners find the best tools & products  
+   - Author image, story, and contact link  
+
+7. `/contact` – **Contact Page**  
+   - Form: Name, Email, Message  
+   - Sanitize all fields  
+   - On submit → console.log (no backend needed for now)
+
+8. `/auth` – **Login / Signup Page**  
+   - Uses Supabase Auth (email/password)  
+   - Forms for sign up and login  
+   - After login, redirect to account page  
+
+9. `/account` – **User Dashboard**  
+   - Shows saved wishlist and basket  
+   - Allows user to remove items or checkout (redirect to affiliate links)  
+   - Logout button  
+   - Displays user profile info (from Supabase)  
+
+10. `/admin` – **Admin Dashboard**  
+   - Protected route (only logged-in admin user can access)  
+   - Add/Edit/Delete products stored in Supabase database  
+   - Upload product image (Supabase Storage)  
+   - Form fields:
+     - Name
+     - Category
+     - Price
+     - Discount Price
+     - Description
+     - Rating
+     - Affiliate Link
+     - Upload Image
+
+---
+
+### 🛠️ FUNCTIONAL FEATURES:
+- Products data stored dynamically in Supabase `products` table  
+- Blogs stored in `/data/blogs.json` for now  
+- Product schema in Supabase:
+
+
+{
+id: uuid,
+name: string,
+slug: string,
+category: string,
+price: number,
+discountPrice: number,
+image: string,
+description: string,
+rating: number,
+affiliateLink: string,
+created_at: timestamp
+}
+
+- Auto-calculate discount percentage (based on price vs discountPrice)
+- Category filter buttons (interactive)
+- Client-side search bar
+- Basket and wishlist:
+- Stored per user in Supabase
+- Each item: { product_id, quantity, user_id }
+- Dark mode toggle (optional)
+- Smooth page transitions (Framer Motion)
+
+---
+
+### 🎨 DESIGN THEME:
+- **Primary color:** #4CAF50 (green)
+- **Accent color:** #81C784 (light green)
+- **Background:** gradient `from-green-50 to-white`
+- **Cards:** rounded-2xl, soft shadows, hover scale animation
+- **Buttons:** gradient green with glow hover
+- **Text color:** #1B4332 (headings), #2D6A4F (paragraphs)
+- **Font sizes:** xl for headings, base for body
+- **Layout:** max width 1200px, centered container, padding x-6
+- **Animations:** fade-up, smooth transitions between routes
+- **Responsive:** fully mobile-friendly
+
+---
+
+### 🔐 SECURITY & PERFORMANCE:
+- Protect `/admin` route (only admin users via Supabase role)
+- Sanitize all user input fields
+- Lazy-load images
+- Use Next.js optimization + static exports
+- Helmet-style meta tags
+- Minify JS/CSS
+- Image optimization enabled
+- Disable right-click (optional)
+- HTTPS enforced by host
+
+---
+
+### 📦 FILE STRUCTURE:
+
+
+/app
+/page.jsx → Home
+/shop/page.jsx → Shop
+/product/[slug]/page.jsx → Product detail
+/blog/page.jsx → Blog list
+/blog/[slug]/page.jsx → Blog detail
+/about/page.jsx
+/contact/page.jsx
+/auth/page.jsx → Login/Signup
+/account/page.jsx → User account
+/admin/page.jsx → Admin upload panel
+/components
+Navbar.jsx, Footer.jsx, ProductCard.jsx, BlogCard.jsx, SearchBar.jsx,
+ProductForm.jsx, BasketCard.jsx, WishlistCard.jsx
+/data
+blogs.json
+/lib
+supabaseClient.js
+/public
+/images
+favicon.ico
+manifest.json
+/styles
+globals.css
+
+
+---
+
+### ⚙️ SUPABASE SETUP:
+- Create free project at https://supabase.com
+- Add to `.env` in Replit:
+
+
+NEXT_PUBLIC_SUPABASE_URL=your_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key_here
+
+- Tables:
+- `products`
+- `users` (auto from auth)
+- `basket`
+- `wishlist`
+- Each product image uploaded via Supabase Storage bucket `product-images`
+
+---
+
+### ⚡ DEPLOYMENT:
+- Should run instantly on Replit (port 3000)
+- Scripts:
+
+
+"dev": "next dev",
+"build": "next build",
+"start": "next start"
+
+- Free hosting on Replit or Vercel (no domain needed)
+- Generates public URL like `https://mygarden.replit.app`
+
+---
+
+### 🌟 FINAL TOUCHES:
+- Footer with:  
+“As an Amazon Associate, we may earn commissions from qualifying purchases.”
+- Favicon (leaf icon)
+- Responsive navbar with hamburger menu
+- Smooth scroll & hover effects
+- SEO optimization (Lighthouse score 90+)
+- Privacy Policy & Terms links (optional footer)
+- Newsletter signup (console.log only for now)
+- Show toast notifications for add/remove cart items
+
+---
+
+✅ **EXPECTED RESULT:**
+A complete, modern, fast, and secure affiliate website with:
+- Login/signup/logout
+- Basket & wishlist (per user)
+- Admin upload panel
+- Supabase backend (free)
+- JSON-based blogs
+- Beautiful UI (Tailwind + ShadCN)
+- Full animation & responsiveness
+- Free hosting-ready (Replit/Vercel)
+- 100% free setup, no external API keys other than Supabase
+
+
+✅ Summary of What Happens When You Run It in Replit:
+
+Replit auto-creates a Next.js + Tailwind project
+
+All pages & components are scaffolded
+
+Supabase client is initialized
+
+You’ll just add your Supabase keys (2 lines)
+
+Hit “Run” → your full-featured website launches 🎉
