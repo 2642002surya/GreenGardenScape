@@ -8,16 +8,32 @@ import { Card } from "@/components/ui/card";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { signUp, signIn } from "@/lib/supabase";
 
 export default function AuthPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({ name: "", email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login:", loginData);
+    setIsLoading(true);
+    
+    const { data, error } = await signIn(loginData.email, loginData.password);
+    
+    setIsLoading(false);
+    
+    if (error) {
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
       title: "Success!",
       description: "You've been logged in.",
@@ -25,12 +41,26 @@ export default function AuthPage() {
     setLocation("/account");
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup:", signupData);
+    setIsLoading(true);
+    
+    const { data, error } = await signUp(signupData.email, signupData.password);
+    
+    setIsLoading(false);
+    
+    if (error) {
+      toast({
+        title: "Signup failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
       title: "Success!",
-      description: "Your account has been created.",
+      description: "Your account has been created. Please check your email to verify your account.",
     });
     setLocation("/account");
   };
@@ -78,8 +108,8 @@ export default function AuthPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" data-testid="button-login-submit">
-                    Login
+                  <Button type="submit" className="w-full" disabled={isLoading} data-testid="button-login-submit">
+                    {isLoading ? "Logging in..." : "Login"}
                   </Button>
                 </form>
               </TabsContent>
@@ -121,8 +151,8 @@ export default function AuthPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" data-testid="button-signup-submit">
-                    Create Account
+                  <Button type="submit" className="w-full" disabled={isLoading} data-testid="button-signup-submit">
+                    {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
               </TabsContent>

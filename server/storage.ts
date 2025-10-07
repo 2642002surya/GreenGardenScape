@@ -82,6 +82,7 @@ export class MemStorage implements IStorage {
     const product: Product = { 
       ...insertProduct,
       discountPrice: insertProduct.discountPrice || null,
+      rating: insertProduct.rating || 5,
       id,
       createdAt: new Date()
     };
