@@ -93,87 +93,87 @@ export default function HomePage() {
       <AnimatedPage>
         <div className="min-h-screen flex flex-col">
           <Navbar />
-      
-      <main className="flex-1">
-        <HeroSection />
+          
+          <main className="flex-1">
+            <HeroSection />
 
-        {/* Featured Categories */}
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-center mb-12" data-testid="text-categories-title">
-              Shop by Category
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {categories.map((category) => (
-                <CategoryCard
-                  key={category.title}
-                  icon={category.icon}
-                  title={category.title}
-                  onClick={() => {
-                    console.log(`Category clicked: ${category.title}`);
-                    setLocation('/shop');
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+            {/* Featured Categories */}
+            <section className="py-16 bg-background">
+              <div className="max-w-7xl mx-auto px-6">
+                <h2 className="text-3xl md:text-4xl font-heading font-bold text-center mb-12" data-testid="text-categories-title">
+                  Shop by Category
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                  {categories.map((category) => (
+                    <CategoryCard
+                      key={category.title}
+                      icon={category.icon}
+                      title={category.title}
+                      onClick={() => {
+                        console.log(`Category clicked: ${category.title}`);
+                        setLocation('/shop');
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        {/* Featured Products */}
-        <section className="py-16 bg-card">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4" data-testid="text-featured-title">
-                Featured Products
-              </h2>
-              <p className="text-muted-foreground text-lg" data-testid="text-featured-description">
-                Handpicked essentials for your garden
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  {...product}
-                  onViewDetails={() => {
-                    console.log(`View product: ${product.name}`);
-                    setLocation(`/product/${product.id}`);
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+            {/* Featured Products */}
+            <section className="py-16 bg-card">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4" data-testid="text-featured-title">
+                    Featured Products
+                  </h2>
+                  <p className="text-muted-foreground text-lg" data-testid="text-featured-description">
+                    Handpicked essentials for your garden
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      {...product}
+                      onViewDetails={() => {
+                        console.log(`View product: ${product.name}`);
+                        setLocation(`/product/${product.id}`);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        {/* Best Deals Section */}
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4" data-testid="text-deals-title">
-                Best Deals
-              </h2>
-              <p className="text-muted-foreground text-lg" data-testid="text-deals-description">
-                Don't miss out on these amazing offers
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.slice(0, 4).filter(p => p.discountPrice).map((product) => (
-                <ProductCard
-                  key={product.id}
-                  {...product}
-                  onViewDetails={() => {
-                    console.log(`View product: ${product.name}`);
-                    setLocation(`/product/${product.id}`);
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
+            {/* Best Deals Section */}
+            <section className="py-16 bg-background">
+              <div className="max-w-7xl mx-auto px-6">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4" data-testid="text-deals-title">
+                    Best Deals
+                  </h2>
+                  <p className="text-muted-foreground text-lg" data-testid="text-deals-description">
+                    Don't miss out on these amazing offers
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {featuredProducts.slice(0, 4).filter(p => p.discountPrice).map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      {...product}
+                      onViewDetails={() => {
+                        console.log(`View product: ${product.name}`);
+                        setLocation(`/product/${product.id}`);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        {/* Newsletter */}
-        <Newsletter />
-      </main>
+            {/* Newsletter */}
+            <Newsletter />
+          </main>
 
           <Footer />
         </div>
