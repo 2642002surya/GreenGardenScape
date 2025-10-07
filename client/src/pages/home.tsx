@@ -4,6 +4,8 @@ import HeroSection from "@/components/HeroSection";
 import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
 import Newsletter from "@/components/Newsletter";
+import SEO from "@/components/SEO";
+import AnimatedPage from "@/components/AnimatedPage";
 import { Shovel, Sprout, Droplet, Flower, Leaf } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -83,8 +85,14 @@ export default function HomePage() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <>
+      <SEO 
+        title="Home" 
+        description="GreenGarden - Your ultimate destination for premium gardening tools, seeds, fertilizers, and expert advice. Transform your garden with our curated collection of eco-friendly products." 
+      />
+      <AnimatedPage>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
       
       <main className="flex-1">
         <HeroSection />
@@ -167,7 +175,9 @@ export default function HomePage() {
         <Newsletter />
       </main>
 
-      <Footer />
-    </div>
+          <Footer />
+        </div>
+      </AnimatedPage>
+    </>
   );
 }
