@@ -14,7 +14,7 @@ export default function HeroSection() {
       
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 text-center">
         <h1 className="text-5xl md:text-6xl font-heading font-bold text-white mb-6" data-testid="text-hero-title">
-          Grow Your Perfect Garden
+          <img src="/hero-bg.png" alt="Garden" loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-60" />
         </h1>
         <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto" data-testid="text-hero-subtitle">
           Discover the best tools, seeds, and supplies for your gardening journey
