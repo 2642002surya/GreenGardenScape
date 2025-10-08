@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,80 +8,45 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Heart, ShoppingCart, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// todo: remove mock functionality - sample product data
-import toolsImage from "@assets/generated_images/Gardening_tools_product_image_51be800b.png";
-import seedsImage from "@assets/generated_images/Seeds_category_product_image_18b61131.png";
-import fertilizerImage from "@assets/generated_images/Fertilizer_product_image_681d4d65.png";
-
-// todo: remove mock functionality
-const products: any = {
-  "1": {
-    id: "1",
-    name: "Professional Gardening Tool Set",
-    slug: "professional-gardening-tool-set",
-    category: "Tools",
-    price: 49.99,
-    discountPrice: 39.99,
-    image: toolsImage,
-    images: [toolsImage, seedsImage, fertilizerImage],
-    description: "Complete professional-grade gardening tool set featuring ergonomic handles, rust-resistant materials, and everything you need for a thriving garden. This comprehensive set includes a trowel, pruning shears, cultivator, weeder, and transplanter - all crafted from high-quality stainless steel for durability and long-lasting performance.",
-    rating: 5,
-    affiliateLink: "https://amazon.com/example-link",
-  },
-  "2": {
-    id: "2",
-    name: "Organic Vegetable Seed Collection",
-    slug: "organic-vegetable-seed-collection",
-    category: "Seeds",
-    price: 24.99,
-    discountPrice: 19.99,
-    image: seedsImage,
-    images: [seedsImage, toolsImage],
-    description: "Premium organic vegetable seed collection with heirloom varieties. Includes tomatoes, peppers, lettuce, carrots, and herbs. Non-GMO, certified organic seeds for sustainable gardening.",
-    rating: 5,
-    affiliateLink: "https://amazon.com/example-link",
-  },
-};
-
-// todo: remove mock functionality
-const relatedProducts = [
-  {
-    id: "2",
-    image: seedsImage,
-    name: "Organic Vegetable Seed Collection",
-    price: 24.99,
-    discountPrice: 19.99,
-    rating: 5,
-    category: "Seeds",
-  },
-  {
-    id: "3",
-    image: fertilizerImage,
-    name: "Premium Organic Fertilizer",
-    price: 34.99,
-    rating: 4,
-    category: "Fertilizers",
-  },
-];
 
 export default function ProductDetailPage() {
   const [, params] = useRoute("/product/:id");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const productId = params?.id || "1";
-  
-  // todo: remove mock functionality - get from Supabase
-  const product = products[productId] || products["1"];
-  
+  const productId = params?.id;
+  const [product, setProduct] = useState<any>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const discount = product.discountPrice 
-    ? Math.round(((product.price - product.discountPrice) / product.price) * 100) 
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/products/${productId}`);
+        const data = await res.json();
+        setProduct(data);
+        // Fetch related products by category
+        if (data?.category) {
+          const relRes = await fetch(`/api/products`);
+          const relData = await relRes.json();
+          setRelatedProducts(relData.filter((p: any) => p.category === data.category && p.id !== data.id));
+        }
+      } catch (err) {
+        setProduct(null);
+      }
+      setLoading(false);
+    }
+    if (productId) fetchProduct();
+  }, [productId]);
+
+  const discount = product?.discountPrice
+    ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
     : 0;
 
   const handleAddToBasket = () => {
-    console.log("Added to basket:", product.name);
+    if (!product) return;
     toast({
       title: "Added to basket!",
       description: `${product.name} has been added to your basket.`,
@@ -89,48 +54,36 @@ export default function ProductDetailPage() {
   };
 
   const handleAddToWishlist = () => {
+    if (!product) return;
     setIsWishlisted(!isWishlisted);
     toast({
       title: isWishlisted ? "Removed from wishlist" : "Added to wishlist!",
-      description: isWishlisted 
+      description: isWishlisted
         ? `${product.name} has been removed from your wishlist.`
         : `${product.name} has been added to your wishlist.`,
     });
   };
 
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (!product) return <div className="text-center mt-10">Product not found.</div>;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      
       <main className="flex-1 py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             {/* Image Gallery */}
             <div>
               <div className="aspect-square rounded-2xl overflow-hidden mb-4 bg-card">
-                <img 
-                  src={product.images[selectedImage]} 
-                  alt={product.name} 
+                <img
+                  src={product.image}
+                  alt={product.name}
                   className="w-full h-full object-cover"
                   data-testid="img-product-main"
                 />
               </div>
-              <div className="grid grid-cols-4 gap-3">
-                {product.images.map((img: string, idx: number) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all hover-elevate ${
-                      selectedImage === idx ? 'border-primary' : 'border-transparent'
-                    }`}
-                    data-testid={`button-gallery-${idx}`}
-                  >
-                    <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
             </div>
-
             {/* Product Info */}
             <div className="space-y-6">
               <div>
@@ -138,7 +91,6 @@ export default function ProductDetailPage() {
                 <h1 className="text-4xl font-heading font-bold mb-4" data-testid="text-product-name">
                   {product.name}
                 </h1>
-                
                 {/* Rating */}
                 <div className="flex items-center gap-2 mb-4">
                   <div className="flex items-center gap-1">
@@ -153,7 +105,6 @@ export default function ProductDetailPage() {
                     {product.rating} out of 5
                   </span>
                 </div>
-
                 {/* Price */}
                 <div className="flex items-baseline gap-3 mb-6">
                   {product.discountPrice ? (
@@ -174,18 +125,16 @@ export default function ProductDetailPage() {
                     </span>
                   )}
                 </div>
-
                 {/* Description */}
                 <p className="text-muted-foreground leading-relaxed mb-6" data-testid="text-description">
                   {product.description}
                 </p>
               </div>
-
               {/* Actions */}
               <div className="space-y-3">
-                <a 
-                  href={product.affiliateLink} 
-                  target="_blank" 
+                <a
+                  href={product.affiliateLink}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="block"
                 >
@@ -194,19 +143,18 @@ export default function ProductDetailPage() {
                     Buy on Amazon
                   </Button>
                 </a>
-                
                 <div className="grid grid-cols-2 gap-3">
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
+                  <Button
+                    size="lg"
+                    variant="outline"
                     onClick={handleAddToBasket}
                     data-testid="button-add-basket"
                   >
                     <ShoppingCart className="h-5 w-5 mr-2" />
                     Add to Basket
                   </Button>
-                  <Button 
-                    size="lg" 
+                  <Button
+                    size="lg"
                     variant="outline"
                     onClick={handleAddToWishlist}
                     data-testid="button-add-wishlist"
@@ -218,7 +166,6 @@ export default function ProductDetailPage() {
               </div>
             </div>
           </div>
-
           {/* Related Products */}
           <section>
             <h2 className="text-3xl font-heading font-bold mb-8" data-testid="text-related-title">
@@ -230,7 +177,6 @@ export default function ProductDetailPage() {
                   key={relatedProduct.id}
                   {...relatedProduct}
                   onViewDetails={() => {
-                    console.log(`View product: ${relatedProduct.name}`);
                     setLocation(`/product/${relatedProduct.id}`);
                   }}
                 />
@@ -239,7 +185,6 @@ export default function ProductDetailPage() {
           </section>
         </div>
       </main>
-
       <Footer />
     </div>
   );

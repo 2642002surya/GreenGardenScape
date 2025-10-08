@@ -54,6 +54,10 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   } else {
     serveStatic(app);
+    // Catch-all route for SPA support
+    app.get("*", (req, res) => {
+      res.sendFile("index.html", { root: "client" });
+    });
   }
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
