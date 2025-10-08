@@ -12,16 +12,20 @@ import {
   removeFromBasket,
   getWishlistByUser,
   addToWishlist,
-  removeFromWishlist
+  removeFromWishlist,
 } from "./storage";
-import { insertProductSchema, insertBasketSchema, insertWishlistSchema } from "@shared/schema";
+import {
+  insertProductSchema,
+  insertBasketSchema,
+  insertWishlistSchema,
+} from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products routes
   app.get("/api/products", async (req, res) => {
     try {
-  const products = await getProducts();
-  res.json(products);
+      const products = await getProducts();
+      res.json(products);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch products" });
     }
@@ -29,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/products/:id", async (req, res) => {
     try {
-  const product = await getProduct(req.params.id);
+      const product = await getProduct(req.params.id);
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
@@ -41,7 +45,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/products/slug/:slug", async (req, res) => {
     try {
-  const product = await getProductBySlug(req.params.slug);
+      const product = await getProductBySlug(req.params.slug);
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
@@ -54,7 +58,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/products", async (req, res) => {
     try {
       const validatedData = insertProductSchema.parse(req.body);
-  const product = await createProduct(validatedData);
+      const product = await createProduct(validatedData);
       res.status(201).json(product);
     } catch (error) {
       res.status(400).json({ error: "Invalid product data" });
@@ -63,7 +67,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put("/api/products/:id", async (req, res) => {
     try {
-  const product = await updateProduct(req.params.id, req.body);
+      const product = await updateProduct(req.params.id, req.body);
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
       }
@@ -75,7 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/products/:id", async (req, res) => {
     try {
-  const deleted = await deleteProduct(req.params.id);
+      const deleted = await deleteProduct(req.params.id);
       if (!deleted) {
         return res.status(404).json({ error: "Product not found" });
       }
@@ -88,7 +92,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Basket routes
   app.get("/api/basket/:userId", async (req, res) => {
     try {
-  const items = await getBasketByUser(req.params.userId);
+      const items = await getBasketByUser(req.params.userId);
       res.json(items);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch basket" });
@@ -98,7 +102,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/basket", async (req, res) => {
     try {
       const validatedData = insertBasketSchema.parse(req.body);
-  const item = await addToBasket(validatedData);
+      const item = await addToBasket(validatedData);
       res.status(201).json(item);
     } catch (error) {
       res.status(400).json({ error: "Invalid basket data" });
@@ -107,7 +111,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/basket/:id", async (req, res) => {
     try {
-  const deleted = await removeFromBasket(req.params.id);
+      const deleted = await removeFromBasket(req.params.id);
       if (!deleted) {
         return res.status(404).json({ error: "Item not found" });
       }
@@ -120,7 +124,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Wishlist routes
   app.get("/api/wishlist/:userId", async (req, res) => {
     try {
-  const items = await getWishlistByUser(req.params.userId);
+      const items = await getWishlistByUser(req.params.userId);
       res.json(items);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch wishlist" });
@@ -130,7 +134,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/wishlist", async (req, res) => {
     try {
       const validatedData = insertWishlistSchema.parse(req.body);
-  const item = await addToWishlist(validatedData);
+      const item = await addToWishlist(validatedData);
       res.status(201).json(item);
     } catch (error) {
       res.status(400).json({ error: "Invalid wishlist data" });
@@ -139,7 +143,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete("/api/wishlist/:id", async (req, res) => {
     try {
-  const deleted = await removeFromWishlist(req.params.id);
+      const deleted = await removeFromWishlist(req.params.id);
       if (!deleted) {
         return res.status(404).json({ error: "Item not found" });
       }

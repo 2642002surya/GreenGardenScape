@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import productsJson from "../data/products.json";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -19,19 +20,27 @@ export default function ShopPage() {
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
+      let data = [];
       try {
         const res = await fetch("/api/products");
-        const data = await res.json();
-        setProducts(data);
+        if (res.ok) {
+          data = await res.json();
+        }
       } catch (err) {
-        setProducts([]);
+        // ignore fetch error
       }
+      // Fallback to local products.json if API fails or returns empty
+      if (!Array.isArray(data) || data.length === 0) {
+        data = productsJson;
+      }
+      setProducts(data);
       setLoading(false);
     }
     fetchProducts();
   }, []);
 
   const filteredProducts = products.filter((product) => {
+    if (!product || !product.name || !product.category) return false;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -70,21 +79,22 @@ export default function ShopPage() {
             <div className="text-center py-12">Loading...</div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    {...product}
-                    onViewDetails={() => {
-                      setLocation(`/product/${product.id}`);
-                    }}
-                  />
-                ))}
-              </div>
-              {filteredProducts.length === 0 && (
+              {filteredProducts.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      {...product}
+                      onViewDetails={() => {
+                        setLocation(`/product/${product.id}`);
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground text-lg" data-testid="text-no-results">
-                    No products found. Try a different search or category.
+                    No products available yet.
                   </p>
                 </div>
               )}

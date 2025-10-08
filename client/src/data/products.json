@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "Professional Gardening Tool Set",
+    "category": "Tools",
+    "price": 49.99,
+    "discountPrice": 39.99,
+    "image": "/assets/generated_images/Gardening_tools_product_image_51be800b.png",
+    "description": "Complete professional-grade gardening tool set featuring ergonomic handles, rust-resistant materials, and everything you need for a thriving garden.",
+    "rating": 5
+  },
+  {
+    "id": "2",
+    "name": "Organic Vegetable Seed Collection",
+    "category": "Seeds",
+    "price": 24.99,
+    "discountPrice": 19.99,
+    "image": "/assets/generated_images/Seeds_category_product_image_18b61131.png",
+    "description": "Premium organic vegetable seed collection with heirloom varieties. Non-GMO, certified organic seeds for sustainable gardening.",
+    "rating": 5
+  },
+  {
+    "id": "3",
+    "name": "Premium Organic Fertilizer",
+    "category": "Fertilizers",
+    "price": 34.99,
+    "image": "/assets/generated_images/Fertilizer_product_image_681d4d65.png",
+    "description": "High-quality organic fertilizer for healthy plant growth.",
+    "rating": 4
+  },
+  {
+    "id": "4",
+    "name": "Terracotta Planter Set",
+    "category": "Pots & Planters",
+    "price": 44.99,
+    "discountPrice": 34.99,
+    "image": "/assets/generated_images/Pots_and_planters_image_ae6a8c65.png",
+    "description": "Classic terracotta planters for indoor and outdoor use.",
+    "rating": 5
+  },
+  {
+    "id": "5",
+    "name": "Indoor Plant Collection",
+    "category": "Indoor Plants",
+    "price": 59.99,
+    "image": "/assets/generated_images/Indoor_plants_product_image_7590ab82.png",
+    "description": "A curated set of easy-care indoor plants.",
+    "rating": 5
+  }
+]
